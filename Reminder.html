@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Ruang Administrasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <div class="bg-green-700 text-white p-4 flex items-center">
+        <i class="fas fa-bars mr-4"></i>
+        <h1 class="text-xl">Ruang Reminder</h1>
+    </div>
+
+    <!-- Main Content -->
+<div class="flex items-center mb-4">
+    <label class="mr-2"> Pilih Template Reminder :</label>
+    <select id="templateSelect" class="border-b-2 border-gray-300 p-2 w-40" onchange="updateReminderText()">
+        <option value="">--Pilih--</option>
+        <option value="1">SPP menunggak 1 bulan</option>
+        <option value="2">SPP menunggak 2 bulan</option>
+        <option value="3">SPP menunggak 3 bulan</option>
+    </select>
+</div>
+<input type="text" id="reminderText" class="w-full border-b-2 border-gray-300 p-2 mb-4" placeholder="Ketik WA Reminder" target="_blank">
+
+<script>
+    function updateReminderText() {
+        const select = document.getElementById('templateSelect');
+        const reminderText = document.getElementById('reminderText');
+        let text = '';
+
+        switch (select.value) {
+            case '1':
+                text = "Pemberitahuan: SPP Anda telah menunggak selama 1 bulan. Mohon segera melakukan pembayaran untuk menghindari denda.";
+                break;
+            case '2':
+                text = "Pemberitahuan: SPP Anda telah menunggak selama 2 bulan. Segera lakukan pembayaran untuk menghindari konsekuensi lebih lanjut.";
+                break;
+            case '3':
+                text = "Pemberitahuan: SPP Anda telah menunggak selama 3 bulan. Ini adalah pengingat terakhir untuk melakukan pembayaran agar tidak ada masalah di kemudian hari.";
+                break;
+            default:
+                text = '';
+        }
+
+        reminderText.value = text;
+    }
+</script>
+        <div class="bg-white p-4 mt-4 rounded shadow-md">
+            <h2 class="text-green-600 mb-2">Pencarian Data</h2>
+
+<!-- Input Pencarian -->
+<div class="flex items-center bg-gray-900 rounded-full px-4 py-2 w-100 mx-auto">
+    <input id="searchInput" type="text" class="bg-transparent text-gray-400 flex-grow text-lg outline-none" placeholder="Search Nama..">
+    <input id="searchSPPInput" type="text" class="bg-transparent text-gray-400 flex-grow text-lg outline-none" placeholder="Search SPP">
+</div>
+
+<!-- Kontainer untuk Menampilkan Hasil -->
+<div id="results" class="mt-4"></div>
+
+<script>
+    let csvData = [];
+
+    // Fungsi untuk mengambil dan mem-parsing data CSV
+    async function fetchCSVData() {
+        const response = await fetch('Data.csv');
+        const text = await response.text();
+        csvData = parseCSV(text);
+    }
+
+    // Fungsi untuk mem-parsing teks CSV menjadi array
+    function parseCSV(text) {
+        const rows = text.split('\n').map(row => row.split(','));
+        return rows;
+    }
+
+    // Memanggil fungsi fetch saat halaman dimuat
+    window.onload = function() {
+        fetchCSVData();
+    };
+
+// Event listener untuk input pencarian berdasarkan nama
+document.getElementById('searchInput').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        const query = this.value.toLowerCase();
+        const results = csvData.filter(row => row[1].toLowerCase().includes(query)); // Mencari berdasarkan nama
+        displayResults(results);
+    }
+});
+
+// Event listener untuk input pencarian berdasarkan SPP
+document.getElementById('searchSPPInput').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        const query = this.value.toLowerCase();
+        const results = csvData.filter(row => row[2].toLowerCase().includes(query)); // Mencari berdasarkan SPP
+        displayResults(results);
+    }
+});
+
+    // Fungsi untuk menampilkan hasil pencarian
+    function displayResults(results) {
+        const resultsContainer = document.getElementById('results');
+        resultsContainer.innerHTML = '';
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = '<div class="text-gray-400 p-4">No results found.</div>';
+            return;
+        }
+
+        results.forEach(result => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'bg-gray-800 p-4 rounded mb-2 shadow-lg transition-transform transform hover:scale-105';
+            resultItem.innerHTML = `
+                <h2 class="text-lg font-semibold text-white">${result[1]}</h2>
+                <p class="text-gray-400">Kelas: ${result[0]}</p>
+                <p class="text-gray-400">SPP Sudah Dibayarkan: ${result[2]}</p>
+                <p class="text-gray-400">Username/NIS: ${result[6]}</p>
+                <p class="text-gray-400">Password MSS: ${result[7]}</p>
+                <p class="text-red-400">Perkiraan Saldo Tabsan: ${result[8]}</p>
+                <a href="${result[12]}" class="text-blue-400 underline">Download Rapor</a>
+                <a href="${result[5]}" class="text-blue-400 underline">WA Reminder</a>
+            `;
+            resultsContainer.appendChild(resultItem);
+        });
+    }
+</script>
+
+    <!-- Floating Action Button -->
+    <div class="fixed bottom-20 right-4">
+        <button class="bg-green-600 text-white p-4 rounded-full shadow-lg">
+                <a href="https://github.com/Miftahadm/cari2024/tree/main" target="_blank">
+        <i class="fas fa-cog"></i>
+    </a>
+
+        </button>
+    </div>
+
+<!-- Footer -->
+<div class="fixed bottom-0 left-0 right-0 bg-orange-600 text-white flex justify-around p-1">
+    <a href="index.html">
+        <button class="py-2 px-4">HOME</button>
+    </a>
+    <button class="py-2 px-4" onclick="sendMessage()">SEND</button>
+    <a href="https://github.com/Miftahadm/cari2024/tree/main" target="_blank">
+        <button class="py-2 px-4">DATA</button>
+    </a>
+</div>
+<script>
+    function sendMessage() {
+        const message = "Isi keti wa reminder"; // Ganti dengan isi pesan yang diinginkan
+        const waNumber = "YOUR_WA_NUMBER"; // Ganti dengan nomor WhatsApp tujuan
+        const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    }
+</script></body>
+</html>
