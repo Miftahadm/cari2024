@@ -34,13 +34,13 @@
 
         switch (select.value) {
             case '1':
-                text = "Pemberitahuan: SPP Anda telah menunggak terhitung 1 bulan. Mohon segera melakukan pembayaran untuk kelancaran proses pendidikan ananda santri-santriwati dan pesantren.";
+                text = "Pemberitahuan Administrasi: SPP Ananda telah menunggak terhitung 1 bulan. Mohon segera melakukan pembayaran untuk kelancaran proses pendidikan ananda santri-santriwati dan pesantren. Terima kasih.";
                 break;
             case '2':
-                text = "Pemberitahuan: SPP Anda telah menunggak terhitung 2 bulan. Mohon segera melakukan pembayaran untuk kelancaran proses pendidikan ananda santri-santriwati dan pesantren.";
+                text = "Pemberitahuan Administrasi: SPP Ananda telah menunggak terhitung 2 bulan. Mohon segera melakukan pembayaran untuk kelancaran proses pendidikan ananda santri-santriwati dan pesantren. Terima kasih.";
                 break;
             case '3':
-                text = "Pemberitahuan: SPP Anda telah menunggak terhitung 3 bulan. Mohon segera melakukan pembayaran untuk kelancaran proses pendidikan ananda santri-santriwati dan pesantren.";
+                text = "Pemberitahuan Administrasi: SPP Ananda telah menunggak terhitung 3 bulan. Mohon segera melakukan pembayaran untuk kelancaran proses pendidikan ananda santri-santriwati dan pesantren. Terima kasih.";
                 break;
             default:
                 text = '';
@@ -55,6 +55,8 @@
 <!-- Input Pencarian -->
 <div class="flex items-center bg-gray-900 rounded-full px-4 py-2 w-100 mx-auto">
     <input id="searchInput" type="text" class="bg-transparent text-gray-400 flex-grow text-lg outline-none" placeholder="Search Nama..">
+</div> <br>
+<div class="flex items-center bg-gray-900 rounded-full px-4 py-2 w-100 mx-auto">
     <input id="searchSPPInput" type="text" class="bg-transparent text-gray-400 flex-grow text-lg outline-none" placeholder="Search SPP">
 </div>
 
@@ -149,11 +151,13 @@ document.getElementById('searchSPPInput').addEventListener('keydown', function(e
     </a>
 </div>
 <script>
-    function sendMessage() {
-        const message = "Isi keti wa reminder"; // Ganti dengan isi pesan yang diinginkan
-        const waNumber = "YOUR_WA_NUMBER"; // Ganti dengan nomor WhatsApp tujuan
-        const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
-    }
+    
+// Modifikasi fungsi sendMessage untuk mengambil pesan dari reminderText
+function sendMessage() {
+    const reminderText = document.getElementById('reminderText').value; // Ambil nilai dari reminderText
+    const waNumber = "YOUR_WA_NUMBER"; // Ganti dengan nomor WhatsApp tujuan
+    const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(reminderText)}`;
+    window.open(url, '_blank');
+}
 </script></body>
 </html>
