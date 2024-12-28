@@ -155,7 +155,7 @@ document.getElementById('searchSPPInput').addEventListener('keydown', function(e
 // Modifikasi fungsi sendMessage untuk mengambil pesan dari reminderText
 function sendMessage() {
     const reminderText = document.getElementById('reminderText').value; // Ambil nilai dari reminderText
-    const waNumber = "<a href="${result[5]}" class="text-blue-400 underline"> ${result[5]}</a>"; // Ganti dengan nomor WhatsApp tujuan
+    const waNumber = "Ganti dengan nomor WhatsApp tujuan"
     const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(reminderText)}`;
     window.open(url, '_blank');
 }
